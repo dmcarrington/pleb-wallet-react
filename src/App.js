@@ -73,7 +73,9 @@ function App() {
     // After we make a request, we can use the .then() method to handle the response asynchronously
     // This is an alternative to using async/await
     axios
-      .get("https://api.coinbase.com/v2/prices/BTC-USD/spot")
+      .get(
+        `https://api.coinbase.com/v2/prices/BTC-${process.env.REACT_APP_FIAT_CURRENCY}/spot`
+      )
       // .then is a promise that will run when the API call is successful
       .then((res) => {
         setPrice(res.data.data.amount);
@@ -117,7 +119,10 @@ function App() {
         </div>
         <div className="balance-card">
           <h2>Price</h2>
-          <p>${price}</p>
+          <p>
+            {process.env.REACT_APP_FIAT_SYMBOL}
+            {price}
+          </p>
         </div>
       </div>
       <div className="row">
