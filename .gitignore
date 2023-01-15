@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# .env file with API secrets
-.env
+# .env file with API secrets - uncomment when used with real values!
+#.env
