@@ -54,17 +54,13 @@ const PaymentsModal = ({ modalState, setModalState }) => {
     // Keep the page from refreshing when the form is submitted
     e.preventDefault();
 
-    const headers = {
-      "X-Api-Key": process.env.REACT_APP_REACT_APP_API_KEY,
-    };
     const data = {
-      amount: formData.amount,
-      out: false,
+      value: formData.amount,
       // ToDo: Add additional form for user to be able to customize the memo
       memo: "LNBits",
     };
     axios
-      .post("https://legend.lnbits.com/api/v1/payments", data, { headers })
+      .post("http://localhost:5501/lightning/invoice", data)
       .then((res) => setInvoice(res.data.payment_request))
       .catch((err) => console.log(err));
 

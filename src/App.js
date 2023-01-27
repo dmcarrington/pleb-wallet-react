@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 function App() {
   const [price, setPrice] = useState(null);
   const [balance, setBalance] = useState(null);
+  const [channelBalance, setChannelBalance] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [chartData, setChartData] = useState(null);
 
@@ -54,14 +55,19 @@ function App() {
   };
 
   const getWalletBalance = () => {
-    const headers = {
-      "X-Api-Key": process.env.REACT_APP_LNBITS_ADMIN_KEY,
-    };
     axios
-      .get("https://legend.lnbits.com/api/v1/wallet", { headers })
+      .get("http://localhost:5501/lightning/balance")
       .then((res) => {
-        // Divide our balance by 1000 since it is denominated in millisats
-        setBalance(res.data.balance / 1000);
+        setBalance(res.data.total_balance);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getChannelBalance = () => {
+    axios
+      .get("http://localhost:5501/lightning/channelbalance")
+      .then((res) => {
+        setChannelBalance(res.data.balance);
       })
       .catch((err) => console.log(err));
   };
@@ -91,6 +97,7 @@ function App() {
   useEffect(() => {
     getPrice();
     getWalletBalance();
+    getChannelBalance();
     getTransactions();
   }, []);
 
@@ -99,6 +106,7 @@ function App() {
     const interval = setInterval(() => {
       getPrice();
       getWalletBalance();
+      getChannelBalance();
       getTransactions();
     }, 5000);
     return () => clearInterval(interval);
@@ -114,6 +122,8 @@ function App() {
         <div className="balance-card">
           <h2>Balance</h2>
           <p>{balance} sats</p>
+          <h2>Channel Balance</h2>
+          <p>{channelBalance} sats</p>
         </div>
         <div className="balance-card">
           <h2>Price</h2>
